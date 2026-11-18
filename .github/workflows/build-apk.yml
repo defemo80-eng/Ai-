@@ -24,13 +24,21 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Set up Android SDK licenses
+        run: |
+          SDK_DIR="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_HOME=$SDK_DIR" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK_DIR" >> "$GITHUB_ENV"
+          SDKMANAGER=$(find "$SDK_DIR/cmdline-tools" -name sdkmanager -type f 2>/dev/null | head -n 1 || true)
+          if [ -n "$SDKMANAGER" ]; then
+            yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          fi
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.3.1'
+      - name: Install Gradle 9.3.1
+        run: |
+          curl -fsSL https://services.gradle.org/distributions/gradle-9.3.1-bin.zip -o /tmp/gradle-9.3.1-bin.zip
+          unzip -q /tmp/gradle-9.3.1-bin.zip -d /tmp/gradle
+          echo "/tmp/gradle/gradle-9.3.1/bin" >> "$GITHUB_PATH"
 
       - name: Prepare debug signing keystore
         run: |
@@ -39,7 +47,7 @@ jobs:
           fi
 
       - name: Build Debug APK
-        run: gradle :app:assembleDebug --no-daemon
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
 
       - name: Rename APK artifact
         run: cp app/build/outputs/apk/debug/app-debug.apk ChatDep.apk
@@ -51,6 +59,7 @@ jobs:
           path: ChatDep.apk
 
       - name: Publish APK to GitHub Releases
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
