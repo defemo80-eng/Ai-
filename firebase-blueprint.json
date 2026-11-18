@@ -1,0 +1,152 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Configuración y perfil privado del usuario de ChatDep.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID del usuario autenticado con Google."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Nombre visible del usuario."
+        },
+        "email": {
+          "type": "string",
+          "description": "Correo electrónico del usuario."
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "URL de foto de perfil."
+        },
+        "preferredModel": {
+          "type": "string",
+          "enum": ["gemini-3.8-flash", "gemini-3.5-flash-lite"],
+          "description": "Modelo Gemini preferido por el usuario."
+        },
+        "responseStyle": {
+          "type": "string",
+          "enum": ["balanced", "coding", "tutor", "concise"],
+          "description": "Modo de respuesta del asistente ChatDep."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Marca temporal del servidor en creación (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Marca temporal del servidor en actualización (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": ["userId", "displayName", "preferredModel", "responseStyle", "createdAt", "updatedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Hilo de conversación entre el usuario y ChatDep AI.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID propietario de la conversación."
+        },
+        "title": {
+          "type": "string",
+          "description": "Título de la conversación."
+        },
+        "lastMessagePreview": {
+          "type": "string",
+          "description": "Resumen corto del último mensaje."
+        },
+        "messageCount": {
+          "type": "integer",
+          "description": "Cantidad de mensajes en la conversación."
+        },
+        "pinned": {
+          "type": "boolean",
+          "description": "Indica si la conversación está fijada en el historial."
+        },
+        "modelName": {
+          "type": "string",
+          "enum": ["gemini-3.8-flash", "gemini-3.5-flash-lite"],
+          "description": "Modelo usado en la conversación."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Marca temporal del servidor en creación."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Marca temporal del servidor en actualización."
+        }
+      },
+      "required": ["userId", "title", "lastMessagePreview", "messageCount", "pinned", "modelName", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Mensaje individual dentro de una conversación de ChatDep.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID propietario del mensaje."
+        },
+        "conversationId": {
+          "type": "string",
+          "description": "ID de la conversación padre."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "model"],
+          "description": "Autor del mensaje: user o model."
+        },
+        "content": {
+          "type": "string",
+          "description": "Contenido en texto/Markdown del mensaje."
+        },
+        "hasAttachment": {
+          "type": "boolean",
+          "description": "Indica si el mensaje incluyó una imagen o documento adjunto."
+        },
+        "attachmentLabel": {
+          "type": "string",
+          "description": "Etiqueta descriptiva del adjunto analizado."
+        },
+        "attachmentType": {
+          "type": "string",
+          "enum": ["image", "document"],
+          "description": "Tipo de adjunto analizado."
+        },
+        "modelName": {
+          "type": "string",
+          "description": "Nombre del modelo que generó la respuesta."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Marca temporal del servidor en creación."
+        }
+      },
+      "required": ["userId", "conversationId", "role", "content", "hasAttachment", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Perfil y preferencias privadas de cada usuario de ChatDep."
+    },
+    "/users/{userId}/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "Historial de conversaciones de un usuario."
+    },
+    "/users/{userId}/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Mensajes ordenados cronológicamente dentro de una conversación."
+    }
+  }
+}

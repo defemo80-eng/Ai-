@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">ChatDep</string>
+    <string name="chatdep_tagline">Tu IA Inteligente Siempre Contigo</string>
+    <string name="sign_in_with_google">Continuar con Google</string>
+    <string name="choose_google_email">Elegir otro correo de Google</string>
+    <string name="add_google_account">Agregar cuenta de correo Google</string>
+    <string name="register_with_phone">Teléfono (SMS)</string>
+    <string name="send_sms_code">Enviar código SMS</string>
+    <string name="verify_sms_code">Verificar y entrar</string>
+    <string name="new_conversation">Nueva conversación</string>
+    <string name="conversations_history">Historial</string>
+    <string name="message_hint">Escribe tu mensaje a ChatDep…</string>
+    <string name="send_message">Enviar</string>
+    <string name="stop_generation">Detener</string>
+    <string name="attach_image">Adjuntar imagen</string>
+    <string name="attach_document">Adjuntar documento</string>
+    <string name="copy_code">Copiar código</string>
+    <string name="copied">Copiado</string>
+    <string name="sign_out">Cerrar sesión</string>
+    <string name="cd_chatdep_logo">Logotipo oficial de ChatDep AI</string>
+    <string name="cd_open_drawer">Abrir menú de historial</string>
+    <string name="cd_new_chat">Crear nueva conversación</string>
+    <string name="cd_send">Enviar mensaje</string>
+    <string name="cd_attach">Adjuntar archivo o imagen</string>
+    <string name="cd_remove_attachment">Quitar archivo adjunto</string>
+    <string name="cd_settings">Configuración del asistente</string>
+    <string name="cd_copy_message">Copiar respuesta</string>
+    <string name="cd_speak_message">Escuchar respuesta</string>
+    <string name="cd_regenerate">Regenerar respuesta</string>
+    <string name="cd_delete_conversation">Eliminar conversación</string>
+    <string name="cd_pin_conversation">Fijar conversación</string>
+</resources>

@@ -1,0 +1,6 @@
+{
+  "name": "ChatDep",
+  "description": "Asistente de inteligencia artificial conversacional en español para estudiar, programar, analizar imágenes y desarrollar proyectos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
