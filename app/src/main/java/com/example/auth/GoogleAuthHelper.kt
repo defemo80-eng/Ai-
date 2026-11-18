@@ -11,7 +11,6 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
-import com.example.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -28,6 +27,20 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "ChatDepAuth"
 
+private fun resolveWebClientId(context: Context): String? {
+    val resId = context.resources.getIdentifier(
+        "default_web_client_id",
+        "string",
+        context.packageName
+    )
+    if (resId == 0) return null
+    return try {
+        context.getString(resId).takeIf { it.isNotBlank() }
+    } catch (_: Exception) {
+        null
+    }
+}
+
 fun attemptAutoSignIn(
     context: Context,
     credentialManager: CredentialManager,
@@ -39,9 +52,8 @@ fun attemptAutoSignIn(
         onAuthSuccess()
         return
     }
-    val clientId = try {
-        context.getString(R.string.default_web_client_id)
-    } catch (_: Exception) {
+    val clientId = resolveWebClientId(context)
+    if (clientId == null) {
         onUnauthenticated()
         return
     }
@@ -87,10 +99,9 @@ fun onGoogleSignInClicked(
         onAuthError("No se pudo obtener la actividad actual para iniciar sesión.", false)
         return
     }
-    val clientId = try {
-        context.getString(R.string.default_web_client_id)
-    } catch (_: Exception) {
-        onAuthError("Falta la configuración de Google Sign-In (default_web_client_id).", false)
+    val clientId = resolveWebClientId(context)
+    if (clientId == null) {
+        onAuthError("Falta la configuración de Google Sign-In (google-services.json).", false)
         return
     }
 
@@ -142,10 +153,9 @@ fun onChooseGoogleEmailClicked(
         onAuthError("No se pudo obtener la actividad actual para elegir correo.", false)
         return
     }
-    val clientId = try {
-        context.getString(R.string.default_web_client_id)
-    } catch (_: Exception) {
-        onAuthError("Falta la configuración de Google Sign-In (default_web_client_id).", false)
+    val clientId = resolveWebClientId(context)
+    if (clientId == null) {
+        onAuthError("Falta la configuración de Google Sign-In (google-services.json).", false)
         return
     }
 
